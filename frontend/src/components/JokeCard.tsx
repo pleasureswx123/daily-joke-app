@@ -2,15 +2,13 @@
 
 import { useState } from 'react';
 import { HandThumbUpIcon } from '@heroicons/react/24/solid';
+import { Joke } from '@/types/joke';
 
-interface JokeCardProps {
-  setup?: string;
-  punchline: string;
-  type?: string;
+interface JokeCardProps extends Partial<Joke> {
   enableLikes?: boolean;
 }
 
-export default function JokeCard({ setup, punchline, type = '普通', enableLikes = true }: JokeCardProps) {
+export default function JokeCard({ setup, punchline, created_at, enableLikes = true }: JokeCardProps) {
   const [likes, setLikes] = useState(0);
   const [isRevealed, setIsRevealed] = useState(false);
 
@@ -19,7 +17,7 @@ export default function JokeCard({ setup, punchline, type = '普通', enableLike
       <div className="space-y-4">
         <div className="flex justify-between items-start">
           <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-            {type}
+            {created_at ? new Date(created_at).toLocaleDateString('zh-CN') : '今日'}
           </span>
           {enableLikes && (
             <button

@@ -1,10 +1,19 @@
 import JokeCard from '@/components/JokeCard';
-import { jokes } from '@/data/jokes';
+import { Joke } from '@/types/joke';
 
-export default function Home() {
-  // 随机选择一个笑话
-  const randomIndex = Math.floor(Math.random() * jokes.length);
-  const dailyJoke = jokes[randomIndex];
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+
+async function getRandomJoke(): Promise<Joke> {
+  const response = await fetch(`${API_BASE_URL}/random-joke`);
+  if (!response.ok) {
+    throw new Error('Failed to fetch joke');
+  }
+  const data = await response.json();
+  return data.joke;
+}
+
+export default async function Home() {
+  const joke = await getRandomJoke();
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-blue-50 to-white py-12 px-4">
@@ -20,15 +29,16 @@ export default function Home() {
 
         <div className="mt-12">
           <JokeCard
-            setup={dailyJoke.setup}
-            punchline={dailyJoke.punchline}
-            type={dailyJoke.type}
+            id={joke.id}
+            setup={joke.setup}
+            punchline={joke.punchline}
+            created_at={joke.created_at}
           />
         </div>
 
         <div className="text-center mt-8">
           <p className="text-sm text-gray-500">
-            总共 {jokes.length} 个笑话 | 刷新页面换一个
+            每次刷新随机获取一个笑话
           </p>
         </div>
       </div>
