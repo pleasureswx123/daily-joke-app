@@ -4,7 +4,7 @@ import { Joke } from '@/types/joke';
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 async function getRandomJoke(): Promise<Joke> {
-  const response = await fetch(`${API_BASE_URL}/random-joke`);
+  const response = await fetch(`${API_BASE_URL}/daily-joke`);
   if (!response.ok) {
     throw new Error('Failed to fetch joke');
   }
